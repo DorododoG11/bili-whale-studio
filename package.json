@@ -12,6 +12,7 @@
   },
   "files": [
     "lib",
+    "test",
     "locale",
     "icon.svg",
     "cordis.patch.yml",
@@ -32,6 +33,9 @@
     "bundle": {
       "patch": "./cordis.patch.yml"
     }
+  },
+  "scripts": {
+    "test": "node test/smoke.mjs"
   },
   "engines": {
     "node": ">=20"
