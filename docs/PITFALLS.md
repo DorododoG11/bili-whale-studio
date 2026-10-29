@@ -2,20 +2,29 @@
 
 这四条都是真的把插件搞挂过、或者让整轮对话直接失败的，写下来省得再踩。
 
-## 1. 工具参数不能是空对象
+## 1. `parameters` 必须是编译后的 JSON Schema
 
-```js
-// ✗ 会渲染成 "type": null，模型方拒收整个请求：
-//   Invalid schema for function 'xxx': schema must be a JSON Schema of 'type: "object"', got 'type: null'
-parameters: {}
+`defineTool` 接受的是参数 DSL：
 
-// ✓ 至少给一个可选参数
-parameters: { verbose: bool('附带完整配置') }
+```ts
+parameters: { action: { type: 'string', required: true, enum: ['a', 'b'] } }
 ```
 
-DSH 自带的 `get_goal` 能写 `parameters: {}`，是因为它经过 `defineTool` 编译；本插件不 import `@deepseek-ai/dsh-tools`（安装目录里解析不到），直接把定义对象交给注册表，空参数不会被补成 `{type:'object',properties:{},required:[]}`。
+它在注册前会把这层**编译**成模型侧要的 JSON Schema：
 
-`test/smoke.mjs` 把这条钉住了，CI 会跑。
+```json
+{ "type": "object", "properties": { "action": { "type": "string", "enum": ["a","b"] } }, "required": ["action"] }
+```
+
+本插件不能 `import { defineTool } from '@deepseek-ai/dsh-tools'`——这个包只在 DSH 安装目录里，profile 的 `node_modules` 解析不到。所以必须自己编译（`lib/tools.js` 的 `toParamSchema`），否则注册表会把 DSL 原样发给模型，报：
+
+```
+Invalid schema for function 'xxx': schema must be a JSON Schema of 'type: "object"', got 'type: null'
+```
+
+早期症状会让人误判成"空参数才有问题"：因为 `parameters: {}` 编译前后都是空对象，只有它会明显炸。实际是**所有工具**都缺外层 `type: "object"`。
+
+`test/smoke.mjs` 现在对每个工具断言 `parameters.type === 'object'`、`required` 是数组且属性上不再残留 `required: true`，CI 会跑。
 
 ## 2. 改了 lib/*.js，必须重启 DSH 才能生效
 
