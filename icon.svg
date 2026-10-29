@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Whale Studio">
+  <defs>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0A2A4A"/>
+      <stop offset="1" stop-color="#04121F"/>
+    </linearGradient>
+    <linearGradient id="fin" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7CC4FF"/>
+      <stop offset="1" stop-color="#4EA8FF"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#sea)"/>
+  <circle cx="256" cy="244" r="148" fill="#4EA8FF" opacity="0.08"/>
+  <path d="M118 300c46 62 132 84 196 40 26-18 42-46 44-74 1-10-8-16-15-9-22 21-52 28-78 16-30-14-46-48-44-82 1-9-10-14-16-7-30 36-40 84-16 122-24-8-50-6-71 6z" fill="url(#fin)"/>
+  <path d="M330 196c18-4 40 2 54 16 8 8 2 22-10 21-16-2-28-10-36-22-2-4-2-13 8-15z" fill="#EAF6FF" opacity="0.85"/>
+  <circle cx="214" cy="214" r="13" fill="#04121F"/>
+  <circle cx="208" cy="209" r="4" fill="#EAF6FF"/>
+  <path d="M150 366h212" stroke="#4EA8FF" stroke-opacity="0.5" stroke-width="8" stroke-linecap="round"/>
+</svg>
